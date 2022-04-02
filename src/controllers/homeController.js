@@ -26,9 +26,29 @@ let message = await CRUDservice.createNewUser(req.body);
 console.log(message)
 return res.send('post crud from server');
 }
+let displayGetCRUD = async (req, res) => {
+    let data = await CRUDservice.getAllUser();
+    console.log(data)
+return res.render('test/displayCRUD.ejs', {
+    dataTable: data
+}) 
+}
+let getEditCRUD = async(req, res) => {
+    let userId =    req.query.id;
+    if(userId) {
+        let UserData = await CRUDservice.getUserById(userId);
+        console.log(userData)
+        return res.send('Found a user!')
+    } else {
+        return res.send('users not found!')
+
+    }
+}
 module.exports  = {
     getHomePage: getHomePage,
     getAboutPage: getAboutPage,
     getCRUD: getCRUD,
     postCRUD: postCRUD,
+    displayGetCRUD: displayGetCRUD,
+    getEditCRUD: getEditCRUD
 }
