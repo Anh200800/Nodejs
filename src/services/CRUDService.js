@@ -56,7 +56,7 @@ let getUserInfoById = (userId) => {
                 raw: true,
             })
             if(user){
-                resolve((user))
+                resolve(user)
             } else {
                 resolve([])
             }
@@ -82,9 +82,9 @@ let updateUserData = (data) => {
             } else {
                 resolve();
             }
-            await db.User.update({
+            // await db.User.update({
 
-            })
+            // })
 
         }catch(e) {
             console.log(e);
