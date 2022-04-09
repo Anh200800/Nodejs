@@ -1,7 +1,6 @@
 import db from "../models/index";
 import bcrypt from "bcryptjs";
-import raw from "body-parser/lib/types/raw";
-import { reject } from "bcrypt/promises";
+
 
 let handleUserLogin = (email, password) => {
     return new Promise(async(resolve, reject) => {
@@ -28,7 +27,7 @@ let handleUserLogin = (email, password) => {
                         userData.errMessage = 'wrong password';
                     }
                 } else {
-                    undeData.errCode = 2;
+                    userData.errCode = 2;
                     userData.errMessage = `User's not found`
                 }
             } else {
