@@ -82,9 +82,7 @@ let updateUserData = (data) => {
             } else {
                 resolve();
             }
-            // await db.User.update({
-
-            // })
+           
 
         }catch(e) {
             console.log(e);

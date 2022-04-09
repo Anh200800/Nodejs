@@ -35,12 +35,12 @@ return res.render('test/displayCRUD.ejs', {
 let getEditCRUD = async(req, res) => {
     let userId =  req.query.id;
     if(userId) {
-        let UserData = await CRUDservice.getUserInfoById(userId);
+        let userData = await CRUDservice.getUserInfoById(userId);
         return res.render('test/editCRUD.ejs', {
-            user: UserData
-        })
+            user: userData
+        });
     } else {
-        return res.send('users not found!')
+        return res.send('users not found!');
 
     }
 }
