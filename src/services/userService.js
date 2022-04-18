@@ -116,8 +116,9 @@ let createNewUser = (data) => {
                     lastName: data.lastName,
                     address: data.address,
                     phonenumber: data.phonenumber,
-                    gender:data.gender==='1' ? true :false,
+                    gender:data.gender,
                     roleId: data.roleId, 
+                    positionId: data.positionId
                 })
                 resolve({
                     errCode: 0,
@@ -184,21 +185,30 @@ let updateUserData = (data) => {
         }
     })
 }
+  
 let getAllCodeService = (typeInput) => {
-    return new Promise(async (resolve, reject) => {
-        try{
-            let res = {};
-            let allcode = await db.Allcode.findAll({
-                where: {type: typeInput}
-            });
-            res.errCode = 0;
-            res.data = allcode;
-            resolve(res);
-
-        } catch(e) {
-            reject(e);
-        }
-    })
+  return new Promise(async (resolve, reject) => {
+    try {
+        console.log(typeInput)
+      if (!typeInput) {
+        resolve({ 
+            errCode: 1, 
+            errMessage: "Missing parameter" 
+        });
+      } 
+      else {
+        let res = {};
+        let allcode = await db.Allcode.findAll({
+          where: { type: typeInput },
+        });
+        res.errCode = 0;
+        res.data = allcode;
+        resolve(res);
+      }
+    } catch (e) {
+      reject(e);
+    }
+  });
 }
 module.exports = {
   handleUserLogin: handleUserLogin,
