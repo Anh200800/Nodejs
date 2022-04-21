@@ -118,7 +118,8 @@ let createNewUser = (data) => {
                     phonenumber: data.phonenumber,
                     gender:data.gender,
                     roleId: data.roleId, 
-                    positionId: data.positionId
+                    positionId: data.positionId,
+                    Image: data.avatar
                 })
                 resolve({
                     errCode: 0,
@@ -169,6 +170,14 @@ let updateUserData = (data) => {
                 user.firstName = data.firstName;
                 user.lastName = data.lastName;
                 user.address = data.address;
+                user.roleId = data.roleId;
+                user.positionId = data.positionId;
+                user.gender = data.gender;
+                user.phonenumber = data.phonenumber;
+if(data.avatar){
+    user.Image = data.avatar;
+}
+
                 await user.save();
                 resolve({
                     errCode: 0,
@@ -189,7 +198,6 @@ let updateUserData = (data) => {
 let getAllCodeService = (typeInput) => {
   return new Promise(async (resolve, reject) => {
     try {
-        console.log(typeInput)
       if (!typeInput) {
         resolve({ 
             errCode: 1, 
