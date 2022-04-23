@@ -1,7 +1,7 @@
 import express from "express";
 import homeController from '../controllers/homeController'
 import userController from '../controllers/userController'
-import doctorService from '../controllers/doctorController'
+import doctorController from "../controllers/doctorController";
 let router  = express.Router();
 let initWebRoutes = (app) => {
     router.get('/', homeController.getHomePage);
@@ -21,7 +21,7 @@ let initWebRoutes = (app) => {
     router.delete("/api/delete-user", userController.handleDeleteUser);
 
     router.get('/api/get-all-code', userController.getAllCode);
-    router.get("/api/top-doctor-home", doctorController.getToDoctorHome);
+    router.get("/api/top-doctor-home", doctorController.getTopDoctorHome);
 
 
 
