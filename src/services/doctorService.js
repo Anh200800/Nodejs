@@ -1,5 +1,7 @@
-import { reject } from "bcrypt/promises";
 import db from "../models/index";
+
+
+//get doctor
 let getTopDoctorHome = (limitInput) => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -8,23 +10,25 @@ let getTopDoctorHome = (limitInput) => {
         where: { roleId: "R2" },
         order: [["createdAt", "DESC"]],
         attributes: {
-          exclude: ["password"],
+          exclude: ["password", ],
         },
         include: [
           {
             model: db.Allcode,
             as: "positionData",
-            attributes: ["valueEn", "valuenVi"],
+            attributes: ["valueEn", "valueVi"],
           },
           {
             model: db.Allcode,
             as: "genderData",
-            attributes: ["valueEn", "valuenVi"],
+            attributes: ["valueEn", "valueVi"],
           },
         ],
+
         raw: true,
         nest: true,
       });
+
       resolve({
         errCode: 0,
         data: users,
@@ -34,6 +38,60 @@ let getTopDoctorHome = (limitInput) => {
     }
   });
 };
+//load doctor 
+let getAllDoctors = () => {
+    return new Promise(async(resolve, reject) => {
+        try {
+            let doctors = await db.User.findAll({
+                where: { roleId: 'R2' },
+                attributes: {
+                    exclude: ['password', 'image']
+                },
+            })
+
+            resolve({
+                errCode: 0,
+                data: doctors
+            })
+        } catch (e) {
+            reject(e);
+        }
+    })
+}
+
+//post infor doctor
+let saveDetailInforDoctor = (inputData) => {
+    return new Promise(async(resolve, reject) => {
+      try {
+        if (!inputData.id || !inputData.contentHTML || !inputData.contentMarkdown) {
+            
+          resolve({
+              errCode: 1,
+              errMessage: 'Missing parameter'
+          })
+        } else {
+            await db.Markdown.create({
+              contentHTML: inputData.contentHTML,
+              contentMarkdown: inputData.contentMarkdown,
+              description: inputData.description,
+              doctorId: inputData.doctorId,
+            });
+          resolve({
+            errCode: 0,
+            errMessage: 'save infor doctor succedd!'
+          })
+          }
+
+            
+            
+        } catch (e) {
+            reject(e);
+        }
+    })
+}
+
 module.exports = {
   getTopDoctorHome: getTopDoctorHome,
+  getAllDoctors: getAllDoctors,
+  saveDetailInforDoctor: saveDetailInforDoctor,
 };
