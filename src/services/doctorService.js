@@ -171,20 +171,37 @@ let getAllDoctors = () => {
 let saveDetailInforDoctor = (inputData) => {
   return new Promise(async (resolve, reject) => {
     try {
-      if (!inputData.doctorId || !inputData.contentHTML || !inputData.contentMarkdown) {
+      if (!inputData.doctorId || !inputData.contentHTML || !inputData.contentMarkdown || !inputData.action) {
         console.log(inputData.doctorId),
         resolve({
           errCode: 1,
           errMessage: 'Missing paramerter'
             })
       } else {
-        console.log('hê')
-        await db.Markdown.create({
-          contentHTML: inputData.contentHTML,
-          contentMarkdown: inputData.contentMarkdown,
-          description: inputData.description,
-          doctorId: inputData.doctorId
-        })
+        //  create infor doctor
+                if (inputData.action === 'CREATE') {
+                    await db.Markdown.create({
+                        contentHTML: inputData.contentHTML,
+                        contentMarkdown: inputData.contentMarkdown,
+                        description: inputData.description,
+                        doctorId: inputData.doctorId,
+                    }) 
+                   //edit infor doctor
+                } else if (inputData.action === 'EDIT') {
+                    let doctorMarkdown = await db.Markdown.findOne({
+                        where: { doctorId: inputData.doctorId },
+                        raw: false, //sequelize obj
+                    })
+
+                    if (doctorMarkdown) {
+                        doctorMarkdown.contentHTML = inputData.contentHTML;
+                        doctorMarkdown.contentMarkdown = inputData.contentMarkdown;
+                        doctorMarkdown.description = inputData.description;
+                        doctorMarkdown.updateAt = new Date();
+                        await doctorMarkdown.save()
+                    }
+                }
+
         resolve({
           errCode: 0,
           errMessage: 'save infor doctor succeed!'
@@ -210,10 +227,9 @@ let getDetailDoctorById = (inputId) => {
                 let data = await db.User.findOne({
                     where: { id: inputId },
                     attributes: {
-                        exclude: ['password', 'image']
+                        exclude: ['password']
                     },
-                  include: [
-                    {
+                    include: [{
                             model: db.Markdown,
                             attributes: ['description', 'contentHTML', 'contentMarkdown']
                         },
@@ -224,43 +240,18 @@ let getDetailDoctorById = (inputId) => {
                             attributes: ['valueEn', 'valueVi']
                         },
 
-                        // {
-                        //     model: db.Doctor_Infor,
-                        //     attributes: {
-                        //         exclude: ['id', 'doctorId']
-                        //     },
-
-                        //     include: [{
-                        //             model: db.Allcode,
-                        //             as: 'priceTypeData',
-                        //             attributes: ['valueEn', 'valueVi']
-                        //         },
-
-                        //         {
-                        //             model: db.Allcode,
-                        //             as: 'provinceTypeData',
-                        //             attributes: ['valueEn', 'valueVi']
-                        //         },
-
-                        //         {
-                        //             model: db.Allcode,
-                        //             as: 'paymentTypeData',
-                        //             attributes: ['valueEn', 'valueVi']
-                        //         }
-                            // ]
-
-                        // },
                     ],
                     raw: false,
                     nest: true
                 })
+                if (!data) data = {};
 
-                // if (!data) data = {};
+                //convert image to base64
+                if (data && data.image) {
+                    data.image = new Buffer(data.image, 'base64').toString('binary');
+                }
 
-                // //convert image to base64
-                // if (data && data.image) {
-                //     data.image = new Buffer(data.image, 'base64').toString('binary');
-                // }
+               
 
                 resolve({
                     errCode: 0,
