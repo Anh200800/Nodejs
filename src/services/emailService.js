@@ -16,7 +16,7 @@ let sendSimpleEmail = async(dataSend) => {
 
     // send mail with defined transport object
     let info = await transporter.sendMail({
-        from: '"XuanHoang 👻" <xuanhoang997@gmail.com>', // sender address
+        from: '"Tien Anh 👻" <phamtienanhdev@gmail.com>', // sender address
         to: dataSend.receiverEmail, // list of receivers
         subject: "Thông tin đặt lịch khám bệnh", // Subject line
         html: getBodyHTMLEmail(dataSend),
@@ -72,15 +72,20 @@ let sendAttachment = async(dataSend) => {
 
             // send mail with defined transport object
             let info = await transporter.sendMail({
-                from: '"XuanHoang 👻" <xuanhoang997@gmail.com>', // sender address
-                to: dataSend.email, // list of receivers
-                subject: "Kết quả đặt lịch khám bệnh", // Subject line
-                html: getBodyHTMLEmailRemedy(dataSend),
-                attachments: [{ // encoded string as an attachment
-                    filename: `remedy-${dataSend.patientId}- ${new Date().getTime()}.png`,
-                    content: dataSend.imgBase64.split("base64, ")[1],
-                    encoding: 'base64',
-                }, ]
+              from: '"Tien Anh 👻" <phamtienanhdev@gmail.com>', // sender address
+              to: dataSend.email, // list of receivers
+              subject: "Kết quả đặt lịch khám bệnh", // Subject line
+              html: getBodyHTMLEmailRemedy(dataSend),
+              attachments: [
+                {
+                  // encoded string as an attachment
+                  filename: `remedy-${
+                    dataSend.patientId
+                  }- ${new Date().getTime()}.png`,
+                  content: dataSend.imgBase64.split("base64, ")[1],
+                  encoding: "base64",
+                },
+              ],
             });
             resolve(true)
 

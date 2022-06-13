@@ -10,12 +10,12 @@ let createSpecialty = (data) => {
                     errMessage: 'Missing parameter'
                 })
             } else {
-                await db.Specialty.create({
-                    name: data.name,
-                    image: data.imageBase64,
-                    descriptionHTML: data.descriptionHTML,
-                    descriptionMarkdown: data.descriptionMarkdown,
-                })
+                await db.Speciallty.create({
+                  name: data.name,
+                  image: data.imageBase64,
+                  descriptionHTML: data.descriptionHTML,
+                  descriptionMarkdown: data.descriptionMarkdown,
+                });
 
                 resolve({
                     errCode: 0,
@@ -32,13 +32,13 @@ let createSpecialty = (data) => {
 let getAllSpecialty = () => {
     return new Promise(async(resolve, reject) => {
         try {
-            let data = await db.Specialty.findAll({
-
-            });
+            let data = await db.Speciallty.findAll({});
 
             if (data && data.length > 0) {
                 data.map(item => {
-                    item.image = new Buffer(item.image, 'base64').toString('binary');
+                    item.image = Buffer.from(item.image, "base64").toString(
+                      "binary"
+                    );
                 })
             }
 
@@ -63,10 +63,10 @@ let getDetailSpecialtyById = (inputId, location) => {
                     errMessage: 'Missing parameter'
                 })
             } else {
-                let data = await db.Specialty.findOne({
-                    where: { id: inputId },
-                    attributes: ['descriptionMarkdown', 'descriptionHTML']
-                })
+                let data = await db.Speciallty.findOne({
+                  where: { id: inputId },
+                  attributes: ["descriptionMarkdown", "descriptionHTML"],
+                });
 
                 if (data) {
                     let doctorSpecialty = [];
